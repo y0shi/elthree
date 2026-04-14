@@ -32,6 +32,17 @@ All file paths in this skill are relative to `vault_path`.
 
 ## Task File Format
 
+**Vault directory layout:**
+```
+<vault_path>/
+├── Tasks/       ← task files live here
+├── Projects/    ← project notes with inline tasks
+├── Areas/       ← ongoing responsibility area notes
+├── Archive/     ← completed tasks, organized by quarter
+├── Reviews/     ← weekly review snapshots
+└── Inbox.md     ← quick-capture scratchpad
+```
+
 **Location:** `Tasks/` directory inside the vault
 
 **Filename pattern:** `TASK-NNN_slug-title.md`
@@ -95,7 +106,7 @@ When creating a new task:
 3. For each filename, extract the leading `TASK-NNN` number using the pattern `TASK-(\d+)`
 4. Find the highest number across both lists
 5. Increment by 1
-6. Zero-pad to at least 3 digits: `1` → `001`, `42` → `042`, `100` → `100`, `1000` → `1000`
+6. Zero-pad to 3 digits minimum: `1` → `001`, `42` → `042`, `100` → `100`; IDs ≥ 1000 use their natural digit count (`1000` → `1000`)
 7. If no task files exist yet, start at `TASK-001`
 
 **Never reuse an ID**, even if the original task file was deleted.
@@ -107,6 +118,7 @@ When creating a new task:
 ```
 todo → in-progress → review → done → (archived)
 todo → waiting → todo  (when unblocked)
+any  → waiting         (when waiting_on is populated)
 any  → done            (can skip intermediate states)
 ```
 
@@ -114,6 +126,7 @@ Rules:
 - Set `status: waiting` automatically when `waiting_on` is populated
 - Set `status: done` when all acceptance criteria are checked off
 - Only move tasks to `Archive/` during weekly review or when explicitly asked
+- `blocked_by` is metadata only — populating it does not automatically change status; if the user explicitly says they are blocked, also set `status: waiting` and `waiting_on` to the blocking task ID or person
 
 ---
 
@@ -163,7 +176,7 @@ Rules:
 
 ### Process Inbox
 
-1. Read `Inbox.md`
+1. Read `<vault_path>/Inbox.md`
 2. For each item, decide:
    - **Needs tracking** (has a clear owner, deadline, or acceptance criteria): create a task file in `Tasks/` using the Create operation
    - **Small project action** (single-step, belongs to a known project): add as inline task to the relevant `Projects/` note
@@ -253,7 +266,7 @@ Follow these without exception:
 1. **Never delete a task file** — change `status` to `done` and archive it instead
 2. **Never edit or remove log entries** — only append new ones at the bottom of the Log section
 3. **Never change `id` or `created`** after the file is first created
-4. **Never create task files outside** `Tasks/`, `Projects/`, or `Inbox.md`
+4. **Never create task files outside** `Tasks/` — `Inbox.md` is a capture buffer, not a task file home; inline tasks in `Projects/` notes are acceptable
 5. **Never modify files in `Archive/`** unless explicitly asked by the user
 6. **Never touch `.obsidian/`** configuration files
 7. **If unsure about a field value** — leave it empty rather than guessing
@@ -268,4 +281,5 @@ Follow these without exception:
 - Tags: lowercase, hyphenated — `data-engineering`, not `DataEngineering` or `data_engineering`
 - File slugs: lowercase, hyphenated, max 50 chars
 - Log entries: chronological order, most recent at the bottom
+- Each log entry begins with `YYYY-MM-DD:` — use this prefix to parse dates when checking for staleness (e.g., weekly review stale detection scans for the most recent `YYYY-MM-DD:` prefix in the `## Log` section)
 - YAML: 2-space indentation, never tabs
