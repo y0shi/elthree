@@ -8,7 +8,7 @@ You are running the L3 vault setup wizard. Follow these steps in order. Be conve
 
 Read `~/.l3/config.md`.
 
-**If it exists**, show the current settings:
+**If it exists**, attempt to read the YAML frontmatter. If the file is not valid YAML, say: "Your config file at `~/.l3/config.md` appears corrupted. Do you want to reinitialize (this will overwrite it) or cancel?" Otherwise, show the current settings:
 ```
 Current vault config:
   vault_path: <value>
@@ -30,7 +30,7 @@ Ask these two questions together in a single message:
 > 1. Where should your vault live? (Press Enter for default: `~/vault`)
 > 2. Do you have a Git remote URL? (SSH or HTTPS — optional, press Enter to skip)
 
-Accept whatever the user provides. Expand `~` to the full home directory path.
+Accept whatever the user provides. If the path contains `~`, expand it to the absolute home directory path before using it in any file operations or git commands (e.g., `~/vault` → `/Users/josh/vault`).
 - If vault path is blank: use `~/vault`
 - If git remote is blank: skip git remote setup
 
@@ -145,6 +145,7 @@ Run these commands in the vault directory:
 
 ```bash
 git init
+git branch -M main
 git add -A
 git commit -m "Initial vault setup"
 ```
@@ -155,17 +156,19 @@ git remote add origin <url>
 git push -u origin main
 ```
 
-If any git command fails, report the specific error and continue — the vault files are usable without git. Do not abort the setup.
+If `git init`, `git add`, or `git commit` fail, report the error and continue — the vault files are still usable without git.
+
+If `git push` fails: report the error, tell the user the vault is local-only for now, and note they can retry with `git push -u origin main` from the vault directory after fixing the remote URL.
 
 ---
 
 ## Step 5: Write Config File
 
-Create `~/.l3/` directory if it doesn't exist. Write `~/.l3/config.md`:
+Check if `~/.l3` exists. If it exists and is a file (not a directory), stop and say: "Cannot create config directory: `~/.l3` exists as a file. Please remove or rename it, then re-run `/l3-setup`." Otherwise, create the directory if it doesn't exist. Write `~/.l3/config.md`:
 
 ```markdown
 ---
-vault_path: <full expanded vault path>
+vault_path: <vault_path>
 git_remote: <remote URL, or empty string if not provided>
 created: <today YYYY-MM-DD>
 ---
@@ -204,7 +207,10 @@ Next steps (do these yourself):
     - Push after commit: enabled
 
 Optional (for Claude Desktop):
-[ ] Add filesystem MCP server to ~/Library/Application Support/Claude/claude_desktop_config.json:
+[ ] Add filesystem MCP server to your Claude Desktop config file:
+      macOS: ~/Library/Application Support/Claude/claude_desktop_config.json
+      Windows: %APPDATA%/Claude/claude_desktop_config.json
+      Linux: ~/.config/Claude/claude_desktop_config.json
     {
       "mcpServers": {
         "vault": {
@@ -214,9 +220,10 @@ Optional (for Claude Desktop):
       }
     }
 
-Optional (for Claude Mobile — requires vault pushed to GitHub):
+Optional (for Claude Mobile — only applicable if you pushed your vault to GitHub above):
 [ ] Go to claude.ai → Settings → Connectors → Add GitHub MCP connector
     Authenticate with a GitHub PAT that has repo read/write access
+    This lets Claude Mobile read and write your vault via GitHub commits
 ```
 
 Then say: "You're all set. Run `/l3` anytime to manage your tasks."
