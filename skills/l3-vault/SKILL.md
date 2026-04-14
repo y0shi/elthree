@@ -90,8 +90,8 @@ Context, references, links.
 
 When creating a new task:
 
-1. List all `*.md` files in `Tasks/` (flat, not recursive)
-2. List all `*.md` files in `Archive/` (recursive, including subdirectories)
+1. List all `*.md` files in `Tasks/` (recursive)
+2. List all `*.md` files in `Archive/` (recursive)
 3. For each filename, extract the leading `TASK-NNN` number using the pattern `TASK-(\d+)`
 4. Find the highest number across both lists
 5. Increment by 1
@@ -269,4 +269,3 @@ Follow these without exception:
 - File slugs: lowercase, hyphenated, max 50 chars
 - Log entries: chronological order, most recent at the bottom
 - YAML: 2-space indentation, never tabs
-- Wikilinks in frontmatter must be quoted: `project: "[[Projects/slug]]"`
