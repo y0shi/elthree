@@ -1,0 +1,22 @@
+{
+  "name": "elthree",
+  "description": "Git-backed personal task management for Claude Code. Obsidian is the UI. Claude is the operator. Markdown files are the persistence layer.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Joshua Reddick",
+    "url": "https://github.com/y0shi"
+  },
+  "homepage": "https://github.com/y0shi/elthree",
+  "repository": "https://github.com/y0shi/elthree",
+  "license": "MIT",
+  "keywords": [
+    "task-management",
+    "productivity",
+    "obsidian",
+    "gtd",
+    "personal-productivity",
+    "vault",
+    "git",
+    "markdown"
+  ]
+}
