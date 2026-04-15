@@ -1,0 +1,20 @@
+{
+  "name": "elthree",
+  "description": "Git-backed personal task management for Claude Code. Obsidian is the UI. Claude is the operator.",
+  "owner": {
+    "name": "Joshua Reddick",
+    "url": "https://github.com/y0shi"
+  },
+  "plugins": [
+    {
+      "name": "elthree",
+      "description": "Git-backed personal task management for Claude Code. Obsidian is the UI. Claude is the operator. Markdown files are the persistence layer.",
+      "version": "1.0.0",
+      "source": "./",
+      "author": {
+        "name": "Joshua Reddick",
+        "url": "https://github.com/y0shi"
+      }
+    }
+  ]
+}
