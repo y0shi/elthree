@@ -40,6 +40,7 @@ All file paths in this skill are relative to `vault_path`.
 ├── Areas/       ← ongoing responsibility area notes
 ├── Archive/     ← completed tasks, organized by quarter
 ├── Reviews/     ← weekly review snapshots
+├── Energy/      ← daily energy level logs (one file per day)
 └── Inbox.md     ← quick-capture scratchpad
 ```
 
@@ -243,6 +244,39 @@ Rules:
 3. Archive all `done` tasks in `Tasks/` to `Archive/YYYY-QN/` (see Archive operation)
 4. Process `Inbox.md` (see Process Inbox operation)
 5. Report a summary: N tasks completed, N archived, N overdue, N waiting
+
+---
+
+## Energy Log
+
+**Location:** `Energy/YYYY-MM-DD.md` — one file per day, created on first energy entry for that date.
+
+**File format:**
+```yaml
+---
+date: YYYY-MM-DD
+level: 3
+---
+```
+
+**Reading energy:**
+- Before any recommendation or quick wins operation, check for `Energy/YYYY-MM-DD.md` using today's date
+- If the file exists and has a valid `level` (1–5): use it silently
+- If the file does not exist: ask `"What's your energy level today? (1–5)"` — wait for response, then write the file before proceeding
+
+**Writing energy:**
+- Write `Energy/YYYY-MM-DD.md` whenever the user states their energy level, whether via the briefing prompt or explicitly ("my energy is 4", "set energy to 2")
+- Overwrite if the file already exists — last stated level wins
+
+**Energy-to-cognitive-load compatibility:**
+
+| Energy | Optimal cognitive load range |
+|--------|------------------------------|
+| 1 (foggy/exhausted) | 1–2 |
+| 2 (low) | 1–3 |
+| 3 (steady) | 2–4 |
+| 4 (focused) | 3–5 |
+| 5 (peak) | 4–6 |
 
 ---
 
