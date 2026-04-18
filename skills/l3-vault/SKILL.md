@@ -294,6 +294,62 @@ Read actual file frontmatter — do not guess or estimate task state.
 | "Show TASK-042" | Read `Tasks/TASK-042_*.md` — glob the number, filename suffix may vary |
 | "What's blocked?" | Find files with non-empty `blocked_by` list and `status != done` |
 | "What's scheduled today?" | Find files where `scheduled == today` |
+| "Quick wins", "easy tasks", "what can I knock out fast", "low effort tasks" | Quick Wins operation — see below |
+
+---
+
+## Recommendation Scoring
+
+Used by the energy-aware briefing and quick wins mode. Scores are ephemeral — computed at query time, never written to task files.
+
+**Formula:**
+
+```
+score = (urgency × 0.35) + (goal_alignment × 0.30) + (effort_inverse × 0.20) + (energy_match × 0.15)
+```
+
+**Component definitions:**
+
+`urgency` — deadline proximity, normalized 0–1:
+- Overdue: 1.0
+- Due today: 0.9
+- Due in 1 day: 0.8
+- Due in 2 days: 0.7
+- Due in 3–6 days: 0.5
+- Due in 7+ days: 0.1
+- No due date: 0.3
+
+`goal_alignment` — read the linked project file's `priority` frontmatter field (e.g., `Projects/slug.md`):
+- critical: 1.0 / high: 0.75 / medium: 0.5 / low: 0.25
+- No project, unreadable project file, or missing priority field: 0.5
+
+`effort_inverse` — `1 - (effort / 10)` — lower effort scores higher
+
+`energy_match` — how well the task's cognitive demand matches current energy:
+- `distance = abs(energy_level - cognitive_load)`
+- `energy_match = max(0, 1 - (distance / 5))`
+
+**Fallback:** Tasks missing `cognitive_load` or `effort` cannot be scored. Show them after scored tasks, sorted by priority label (critical > high > medium > low), labeled "Top priorities (unscored):".
+
+## Quick Wins
+
+**Trigger:** User says "quick wins", "easy tasks", "what can I knock out fast", "low effort tasks"
+
+**Steps:**
+1. Check energy (read `Energy/YYYY-MM-DD.md`; ask if missing)
+2. Filter open tasks: `effort ≤ 3` AND `status != done` AND `blocked_by` is empty or all listed IDs have `status: done`
+3. Score filtered tasks using Recommendation Scoring formula
+4. Show max 5, sorted by score descending
+
+**Output format:**
+```
+Quick wins (N tasks, energy: E):
+  TASK-007 — Reply to vendor email [effort: 1, load: 1]
+  TASK-019 — Update deploy config [effort: 2, load: 3]
+  TASK-031 — Review PR from Alex [effort: 3, load: 2]
+```
+
+If no tasks qualify: `"No quick wins found. All open tasks have effort > 3."`
 
 ---
 
