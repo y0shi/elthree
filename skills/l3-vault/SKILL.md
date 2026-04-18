@@ -338,7 +338,7 @@ score = (urgency × 0.35) + (goal_alignment × 0.30) + (effort_inverse × 0.20) 
 **Steps:**
 1. Check energy (read `Energy/YYYY-MM-DD.md`; ask if missing)
 2. Filter open tasks: `effort ≤ 3` AND `status != done` AND `blocked_by` is empty or all listed IDs have `status: done`
-3. Score filtered tasks using Recommendation Scoring formula
+3. Score filtered tasks using Recommendation Scoring formula. Tasks missing `cognitive_load` cannot be fully scored — show them unscored at the bottom of the list, labeled with `[unscored]`
 4. Show max 5, sorted by score descending
 
 **Output format:**
@@ -349,7 +349,7 @@ Quick wins (N tasks, energy: E):
   TASK-031 — Review PR from Alex [effort: 3, load: 2]
 ```
 
-If no tasks qualify: `"No quick wins found. All open tasks have effort > 3."`
+If no tasks qualify: `"No quick wins found. No open tasks with effort ≤ 3 are available (they may be blocked or done)."`
 
 ---
 
