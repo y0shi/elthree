@@ -166,7 +166,7 @@ A new intent in `/l3`.
 
 **Output format:**
 ```
-Quick wins (3 tasks):
+Quick wins (3 tasks, energy: 3):
   TASK-007 — Reply to vendor email [effort: 1, load: 1]
   TASK-019 — Update deploy config [effort: 2, load: 3]
   TASK-031 — Review PR from Alex [effort: 3, load: 2]

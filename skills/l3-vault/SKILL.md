@@ -327,7 +327,7 @@ score = (urgency × 0.35) + (goal_alignment × 0.30) + (effort_inverse × 0.20) 
 
 `energy_match` — how well the task's cognitive demand matches current energy:
 - `distance = abs(energy_level - cognitive_load)`
-- `energy_match = max(0, 1 - (distance / 5))`
+- `energy_match = max(0, 1 - (distance / 5))` — upper bound cannot exceed 1.0 since distance ≥ 0
 
 **Fallback:** Tasks missing `cognitive_load` or `effort` cannot be scored. Show them after scored tasks, sorted by priority label (critical > high > medium > low), labeled "Top priorities (unscored):".
 
