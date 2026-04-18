@@ -73,8 +73,37 @@ tags: []                # Freeform list, lowercase-hyphenated
 waiting_on: ""          # Person or event being waited on
 blocked_by: []          # List of TASK-NNN IDs blocking this task
 source: ""              # Where the task originated (e.g., "RTC meeting 2026-04-14")
+cognitive_load:         # 1–6 (Bloom's: 1=remember, 2=understand, 3=apply, 4=analyze, 5=evaluate, 6=create)
+effort:                 # 1–10 (1=minutes, 10=days of work)
 ---
 ```
+
+**Auto-Classification on Task Creation**
+
+When creating a task, auto-set `cognitive_load` and `effort` from the task title and objective. Allow user override at any time via `/l3 update TASK-NNN set cognitive_load 2` or natural language ("set effort to 3 on TASK-007").
+
+**Cognitive load classification:**
+
+| Value | Label | Keywords / signals |
+|-------|-------|-------------------|
+| 1 | Remember | send, reply, check, look up, find, confirm |
+| 2 | Understand | read, review, summarize, skim, watch |
+| 3 | Apply | update, configure, run, calculate, execute |
+| 4 | Analyze | debug, compare, investigate, trace, audit |
+| 5 | Evaluate | decide, approve, choose, assess, prioritize |
+| 6 | Create | design, build, write, architect, implement |
+
+**Effort estimation:**
+
+| Range | Meaning |
+|-------|---------|
+| 1–2 | Minutes — quick reply, one-liner, checkbox |
+| 3–4 | Under an hour — small update, single config change |
+| 5–6 | A few hours — meaningful feature, thorough review |
+| 7–8 | Half to full day — significant implementation |
+| 9–10 | Multi-day — large feature, complex investigation |
+
+If a task is ambiguous, bias toward the lower classification for both fields. Leave both empty (not 0) rather than guessing.
 
 **Body Structure:**
 
